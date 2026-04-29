@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bird Watch Log</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: white;
+
+        /* Realistic bird background */
+        background-image: url('https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=1600&q=80');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+    }
+
+    /* Full screen overlay */
+    .overlay {
+        background: rgba(0, 0, 0, 0.45);
+        height: 100%;
+        display: flex;
+        justify-content: flex-start; /* move to left */
+        align-items: center;
+        padding-left: 40px; /* spacing from edge */
+    }
+
+    .app {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        padding: 25px;
+        border-radius: 18px;
+        width: 320px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    input, textarea, button {
+        width: 100%;
+        margin: 8px 0;
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        font-size: 14px;
+    }
+
+    input, textarea {
+        background: rgba(255,255,255,0.95);
+        color: black;
+    }
+
+    button {
+        background: #4CAF50;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background: #43a047;
+    }
+
+    .secondary {
+        background: #2196F3;
+    }
+
+    .secondary:hover {
+        background: #1976D2;
+    }
+
+    #status {
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+    <div class="app">
+        <h1>🐦 Bird Watch Log</h1>
+
+        <input type="text" id="species" placeholder="Species">
+        <input type="number" id="number" placeholder="Number Seen">
+        <input type="text" id="location" placeholder="Location">
+
+        <textarea id="behavior" placeholder="Behavior"></textarea>
+        <textarea id="notes" placeholder="Notes"></textarea>
+
+        <!-- Camera -->
+        <input type="file" accept="image/*" capture="environment">
+
+        <!-- GPS -->
+        <button class="secondary" onclick="getLocation()">📍 Use GPS</button>
+
+        <!-- Save -->
+        <button onclick="saveEntry()">💾 Save Entry</button>
+
+        <p id="status"></p>
+    </div>
+</div>
+
+<script>
+function getLocation() {
+    const status = document.getElementById("status");
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            document.getElementById("location").value = `Lat: ${lat}, Lon: ${lon}`;
+            status.innerText = "Location captured!";
+        }, () => {
+            status.innerText = "Unable to retrieve location.";
+        });
+    } else {
+        status.innerText = "Geolocation not supported.";
+    }
+}
+
+function saveEntry() {
+    const species = document.getElementById("species").value;
+    const number = document.getElementById("number").value;
+
+    if (!species || !number) {
+        alert("Please fill in species and number.");
+        return;
+    }
+
+    document.getElementById("status").innerText = "Entry saved! (demo only)";
+}
+</script>
+
+</body>
+</html>
